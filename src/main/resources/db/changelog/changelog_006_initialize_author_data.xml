@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="author-2" author="demo">
+        <insert tableName="author">
+            <column name="first_name">Craig</column>
+            <column name="last_name">Walls</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Robert</column>
+            <column name="last_name">Martin</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Eric</column>
+            <column name="last_name">Evans</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Don</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">John</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Fred</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Jade</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Shane</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Van</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Bon</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Shean</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Will</column>
+            <column name="last_name">Smith</column>
+        </insert>
+        <insert tableName="author">
+            <column name="first_name">Bill</column>
+            <column name="last_name">Smith</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

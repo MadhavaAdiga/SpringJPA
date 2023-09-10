@@ -1,0 +1,52 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "book-3",
+        "author": "swmo",
+        "changes": [
+          {
+            "sql": {
+              "dbms": "!h2, oracle, mysql",
+              "splitStatements": true,
+              "sql": "INSERT INTO bookdb.book(isbn, publisher, title, author_id) VALUES ('978-1617294945', 'Simon & Schuster','Spring in Action, 5th Edition',(SELECT id FROM bookdb.author WHERE first_name = 'Craig' AND last_name = 'Walls'));",
+              "stripComments": true
+            }
+          },
+          {
+            "sql": {
+              "dbms": "!h2, oracle, mysql",
+              "splitStatements": true,
+              "sql": "INSERT INTO bookdb.book (isbn, publisher, title, author_id) VALUES ('978-1617292545', 'Simon & Schuster','Spring Boot in Action, 1st Edition',(SELECT id FROM bookdb.author WHERE first_name = 'Craig' AND last_name = 'Walls'));",
+              "stripComments": true
+            }
+          },
+          {
+            "sql": {
+              "dbms": "!h2, oracle, mysql",
+              "splitStatements": true,
+              "sql": "INSERT INTO bookdb.book (isbn, publisher, title, author_id) VALUES ('978-1617297571', 'Simon & Schuster','Spring in Action, 6th Edition',(SELECT id FROM bookdb.author WHERE first_name = 'Craig' AND last_name = 'Walls'));",
+              "stripComments": true
+            }
+          },
+          {
+            "sql": {
+              "dbms": "!h2, oracle, mysql",
+              "splitStatements": true,
+              "sql": "INSERT INTO bookdb.book (isbn, publisher, title, author_id) VALUES ('978-0321125217', 'Addison Wesley','Domain-Driven Design',(SELECT id FROM bookdb.author WHERE first_name = 'Eric' AND last_name = 'Evans'));",
+              "stripComments": true
+            }
+          },
+          {
+            "sql": {
+              "dbms": "!h2, oracle, mysql",
+              "splitStatements": true,
+              "sql": "INSERT INTO bookdb.book (isbn, publisher, title, author_id) VALUES ('978-0134494166', 'Addison Wesley','Clean Code',(SELECT id FROM bookdb.author WHERE first_name = 'Robert' AND last_name = 'Martin'));",
+              "stripComments": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
