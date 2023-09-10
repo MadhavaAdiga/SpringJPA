@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.NoResultException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +29,56 @@ class BookDaoImplTest {
     BookDao bookDao;
     @Autowired
     AuthorDao authorDao;
+
+    @Test
+    void testFindAll() {
+        List<Book> books = bookDao.findAll();
+
+        assertNotNull(books);
+        assertTrue(books.size() > 0);
+    }
+
+
+    @Test
+    void testFindAllBySizeAndOffset() {
+        List<Book> books = bookDao.findAll(3, 0);
+
+        assertNotNull(books);
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    void testFindAllBySizeAndOffset2() {
+        List<Book> books = bookDao.findAll(3, 100);
+
+        assertNotNull(books);
+        assertEquals(0, books.size());
+    }
+
+    @Test
+    void testFindAllByPageable() {
+        List<Book> books = bookDao.findAll(PageRequest.of(0, 3));
+
+        assertNotNull(books);
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    void testFindAllByPageable2() {
+        List<Book> books = bookDao.findAll(PageRequest.of(100, 3));
+
+        assertNotNull(books);
+        assertEquals(0, books.size());
+    }
+
+    @Test
+    void testFindAllSortByTitle() {
+        List<Book> books = bookDao.findAllSortByTitle(
+                PageRequest.of(0, 10, Sort.by(Sort.Order.desc("title"))));
+
+        assertNotNull(books);
+        assertTrue(books.size() > 0);
+    }
 
     @Test
     void getById() {
@@ -83,15 +133,6 @@ class BookDaoImplTest {
         assertEquals(book, fetched);
     }
 
-    @Test
-    void testFindAll() {
-        List<Book> books = bookDao.findAll();
-
-        assertNotNull(books);
-        assertTrue(books.size() > 0);
-    }
-
-
 //    @Test
 //    void updateBook() {
 //        Book uBook = bookDao.getById(3L);
@@ -113,7 +154,7 @@ class BookDaoImplTest {
         Book savedBook = bookDao.saveNewBook(newBook);
 
         bookDao.deleteBookById(savedBook.getId());
-        assertThrows(JpaObjectRetrievalFailureException.class,() -> {
+        assertThrows(JpaObjectRetrievalFailureException.class, () -> {
             Book book = bookDao.getById(savedBook.getId());
         });
     }

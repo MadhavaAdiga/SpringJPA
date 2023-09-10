@@ -4,6 +4,8 @@ import com.example.springjpa.dao.AuthorDao;
 import com.example.springjpa.domain.Author;
 import com.example.springjpa.repositories.AuthorRepository;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,27 @@ public class AuthorDaoImpl implements AuthorDao {
     }
 
     @Override
+    public List<Author> finalAll() {
+        return authorRepository.findAll();
+    }
+
+    @Override
+    public List<Author> findAll(int size, int offset) {
+        Pageable pageable = PageRequest.ofSize(size);
+
+        pageable = offset > 0 ?
+                pageable.withPage(offset / size) :
+                pageable.withPage(0);
+
+        return findAll(pageable);
+    }
+
+    @Override
+    public List<Author> findAll(Pageable pageable) {
+        return authorRepository.findAll(pageable).getContent();
+    }
+
+    @Override
     public Author getById(Long id) {
         return authorRepository.getReferenceById(id);
     }
@@ -32,33 +55,19 @@ public class AuthorDaoImpl implements AuthorDao {
     }
 
     @Override
-    public List<Author> finalAll() {
-        return authorRepository.findAll();
-    }
-
-    @Override
-    public List<Author> findAll(int size, int offset) {
-        return null;
-    }
-
-    @Override
-    public List<Author> findAll(Pageable pageable) {
-        return null;
-    }
-
-    @Override
     public List<Author> findByCriteria(Author criteria) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Author> findByLastName(String lastName, Pageable pageable) {
-        return null;
+        Page<Author> authorPage = authorRepository.findAuthorByLastName(lastName, pageable);
+        return authorPage.getContent();
     }
 
     @Override
     public Author getByName(String firstName, String lastName) {
-        return authorRepository.findAuthorByFirstNameAndLastName(firstName,lastName)
+        return authorRepository.findAuthorByFirstNameAndLastName(firstName, lastName)
                 .orElseThrow(EntityNotFoundException::new);
     }
 

@@ -4,6 +4,7 @@ import com.example.springjpa.dao.AuthorDao;
 import com.example.springjpa.dao.BookDao;
 import com.example.springjpa.domain.Book;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,10 +42,13 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> findAll(int size, int offset) {
-        return jdbcTemplate.query("SELECT  * FROM book LIMIT ? OFFSET ?",
-                getRowMapper(),
-                size,
-                offset);
+        Pageable pageable = PageRequest.ofSize(size);
+
+        pageable = offset > 0 ?
+                pageable.withPage(offset / size) :
+                pageable.withPage(0);
+
+        return findAll(pageable);
     }
 
     @Override

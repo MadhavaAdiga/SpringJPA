@@ -3,6 +3,7 @@ package com.example.springjpa.dao.hibernate;
 import com.example.springjpa.dao.AuthorDao;
 import com.example.springjpa.domain.Author;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -34,16 +35,13 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public List<Author> findAll(int size, int offset) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Author> query = em.createQuery("SELECT a FROM Author a", Author.class);
-            query.setFirstResult(offset);
-            query.setMaxResults(size);
+        Pageable pageable = PageRequest.ofSize(size);
 
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
+        pageable = offset > 0 ?
+                pageable.withPage(offset / size) :
+                pageable.withPage(0);
+
+        return findAll(pageable);
     }
 
     @Override
@@ -94,8 +92,8 @@ public class AuthorDaoImpl implements AuthorDao {
         hql.append("SELECT a FROM Author a WHERE a.lastName = :last_name");
         hql.append(" ");
 
-        Sort.Order lastNameSortOrder = pageable.getSort().getOrderFor("first_name");
-        if(lastNameSortOrder != null){
+        Sort.Order lastNameSortOrder = pageable.getSort().getOrderFor("firstName");
+        if (lastNameSortOrder != null) {
             hql.append(String.format("order by a.firstName %s", lastNameSortOrder.getDirection().name()));
         }
 

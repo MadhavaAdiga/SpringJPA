@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -30,16 +32,66 @@ class AuthorDaoImplTest {
     }
 
     @Test
-    void testLastName() {
-        List<Author> authors = authorDao.findByLastName("Evans");
+    void testFindAll() {
+        List<Author> authors = authorDao.finalAll();
 
         assertNotNull(authors);
         assertTrue(authors.size() > 0);
     }
 
     @Test
-    void testFindAll() {
-        List<Author> authors = authorDao.finalAll();
+    void testFindAllBySizeAndOffset() {
+        List<Author> books = authorDao.findAll(3, 5);
+
+        assertNotNull(books);
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    void testFindAllBySizeAndOffset2() {
+        List<Author> books = authorDao.findAll(3, 100);
+
+        assertNotNull(books);
+        assertEquals(0, books.size());
+    }
+
+    @Test
+    void testFindByLastNameSortByFirstName() {
+        List<Author> books = authorDao.findByLastName(
+                "Smith", PageRequest.of(0, 5, Sort.by(Sort.Order.desc("firstName"))));
+
+        assertNotNull(books);
+        assertEquals(5, books.size());
+    }
+
+    @Test
+    void testFindByLastNameSortByFirstName2() {
+        List<Author> books = authorDao.findByLastName(
+                "Smith", PageRequest.of(0, 50, Sort.by(Sort.Order.desc("firstName"))));
+
+        assertNotNull(books);
+        assertTrue(books.size() >= 10);
+    }
+
+    @Test
+    void testFindAllByPageable() {
+        List<Author> books = authorDao.findAll(PageRequest.of(0, 3));
+
+        assertNotNull(books);
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    void testFindAllByPageable2() {
+        List<Author> books = authorDao.findAll(PageRequest.of(100, 3));
+
+        assertNotNull(books);
+        assertEquals(0, books.size());
+    }
+
+    @Test
+    void testLastName() {
+        List<Author> authors = authorDao.findByLastName("Evans");
 
         assertNotNull(authors);
         assertTrue(authors.size() > 0);

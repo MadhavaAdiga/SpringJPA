@@ -3,6 +3,7 @@ package com.example.springjpa.dao.hibernate;
 import com.example.springjpa.dao.BookDao;
 import com.example.springjpa.domain.Book;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -46,16 +47,13 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> findAll(int size, int offset) {
-        EntityManager em = getEntityManager();
-        try {
-            TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b", Book.class);
-            query.setFirstResult(offset);
-            query.setMaxResults(size);
+        Pageable pageable = PageRequest.ofSize(size);
 
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
+        pageable = offset > 0 ?
+                pageable.withPage(offset / size) :
+                pageable.withPage(0);
+
+        return findAll(pageable);
     }
 
     @Override
